@@ -2,22 +2,22 @@ import 'package:crud/functions/functions.dart';
 import 'package:crud/model/model.dart';
 import 'package:flutter/material.dart';
 
-
 class EditPage extends StatefulWidget {
+  final dynamic keyId;
   String? name;
   String? address;
   String? age;
   String? classname;
-  int index;
+  
 
   EditPage({
-  required this.name,
-  required this.address,
-  required this.age,
-  required this.classname,
-  required this.index});
-
-  
+    required this.keyId,
+    required this.name,
+    required this.address,
+    required this.age,
+    required this.classname,
+   
+  });
 
   @override
   State<EditPage> createState() => _EditPageState();
@@ -38,20 +38,18 @@ class _EditPageState extends State<EditPage> {
     classnameController = TextEditingController(text: widget.classname);
   }
 
-
-    @override
-    Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Students Update',
-        style: TextStyle(fontWeight: FontWeight.bold,color:Colors.white),
+        title: Text(
+          'Students Update',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: Colors.teal,
         automaticallyImplyLeading: false,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       body: Column(
         children: [
@@ -101,17 +99,18 @@ class _EditPageState extends State<EditPage> {
             onPressed: () {
               editBtn(context);
             },
-            style:ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(
               backgroundColor: Colors.teal,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 40,vertical: 15),
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)
+                borderRadius: BorderRadius.circular(12),
               ),
-            ) ,
-            
-            child: Text('Edit',
-            style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
+            ),
+
+            child: Text(
+              'Edit',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -125,31 +124,34 @@ class _EditPageState extends State<EditPage> {
     final age = ageController.text.trim();
     final classname = classnameController.text.trim();
 
-    if (name.isEmpty || address.isEmpty||age.isEmpty||classname.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(
+    if (name.isEmpty || address.isEmpty || age.isEmpty || classname.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Center(
             child: Text(
               'Enter Fields',
               style: TextStyle(
-                color:Colors.white,
+                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
               ),
-              ),
-          ),
-            backgroundColor: Colors.redAccent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
             ),
-            )
-            
-            );
+          ),
+          backgroundColor: Colors.redAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      );
     } else {
-      final editData = PersonData(name: name, address: address,age: age,classname: classname,addedOn: DateTime.now(),);
-      updateData(widget.index, editData);
+      final editData = PersonData(
+        name: name,
+        address: address,
+        age: age,
+        classname: classname,
+        addedOn: DateTime.now(),
+      );
+      updateData(widget.keyId, editData);
       Navigator.pop(context);
     }
   }

@@ -6,9 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.deleteBoxFromDisk('data');
   Hive.registerAdapter(PersonDataAdapter());
-  // await Hive.deleteBoxFromDisk('data'); 
+ 
 
   runApp(MyApp());
 }

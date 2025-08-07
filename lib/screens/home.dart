@@ -14,12 +14,11 @@ class _MyHomeState extends State<MyHome> {
   @override
   void initState() {
     super.initState();
-    dateData();
+    getData(); 
   }
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -46,15 +45,13 @@ class _MyHomeState extends State<MyHome> {
           backgroundColor: Colors.teal,
           hoverColor: Colors.tealAccent,
           onPressed: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (ctx) => MyAdd()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => MyAdd()));
           },
           child: Icon(Icons.add, size: 30),
         ),
       ),
       body: ValueListenableBuilder(
-        valueListenable: PersonDataNotifier,
+        valueListenable: personDataNotifier,
         builder: (context, value, child) {
           if (value.isEmpty) {
             return Center(
@@ -72,7 +69,9 @@ class _MyHomeState extends State<MyHome> {
           return ListView.builder(
             itemCount: value.length,
             itemBuilder: (context, index) {
-              final myData = value[index];
+              final entry = value[index];         
+              final key = entry.key;             
+              final myData = entry.value;        
 
               return Card(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -84,17 +83,16 @@ class _MyHomeState extends State<MyHome> {
                   leading: CircleAvatar(
                     backgroundImage: AssetImage('assets/images/default.png'),
                   ),
-                  title: Text(myData.name ?? '',style: TextStyle(color: Colors.white),),
+                  title: Text(myData.name ?? '', style: TextStyle(color: Colors.white)),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(myData.address ?? '',style: TextStyle(color: Colors.white),),
-                      Text(myData.age ?? '',style: TextStyle(color: Colors.white),),
-                      Text(myData.classname ?? '',style: TextStyle(color: Colors.white),),
-                      Text('Added: ${myData.addedOn.toString()}',style: TextStyle(color: Colors.white),),
+                      Text(myData.address ?? '', style: TextStyle(color: Colors.white)),
+                      Text(myData.age ?? '', style: TextStyle(color: Colors.white)),
+                      Text(myData.classname ?? '', style: TextStyle(color: Colors.white)),
+                      Text('Added: ${myData.addedOn.toString()}', style: TextStyle(color: Colors.white)),
                     ],
                   ),
-
                   trailing: IconButton(
                     onPressed: () {
                       showDialog(
@@ -102,28 +100,22 @@ class _MyHomeState extends State<MyHome> {
                         builder: (context) {
                           return AlertDialog(
                             title: Text('Delete Confirmation'),
-                            content: Text(
-                              'Are you Sure you want to delete this student?',
-                            ),
+                            content: Text('Are you sure you want to delete this student?'),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                             actions: [
                               TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
+                                onPressed: () => Navigator.of(context).pop(),
                                 child: Text('Cancel'),
                               ),
                               ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-                                ),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
                                 onPressed: () {
-                                  deleteData(index);
+                                  deleteData(key); 
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Delete',style: TextStyle(color: Colors.white),),
+                                child: Text('Delete', style: TextStyle(color: Colors.white)),
                               ),
                             ],
                           );
@@ -137,12 +129,11 @@ class _MyHomeState extends State<MyHome> {
                       context,
                       MaterialPageRoute(
                         builder: (ctx) => EditPage(
+                          keyId: key,                       
                           name: myData.name ?? '',
                           address: myData.address ?? '',
                           age: myData.age ?? '',
                           classname: myData.classname ?? '',
-
-                          index: index,
                         ),
                       ),
                     );
