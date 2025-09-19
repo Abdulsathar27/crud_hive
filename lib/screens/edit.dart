@@ -1,158 +1,64 @@
-import 'package:crud/functions/functions.dart';
 import 'package:crud/model/model.dart';
+import 'package:crud/providers/student_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class EditPage extends StatefulWidget {
-  final dynamic keyId;
-  String? name;
-  String? address;
-  String? age;
-  String? classname;
-  
 
-  EditPage({
-    required this.keyId,
-    required this.name,
-    required this.address,
-    required this.age,
-    required this.classname,
-   
-  });
+class EditPage extends StatelessWidget {
+  final int index;
+  final StudentModel student;
 
-  @override
-  State<EditPage> createState() => _EditPageState();
-}
-
-TextEditingController nameController = TextEditingController();
-TextEditingController addressController = TextEditingController();
-TextEditingController ageController = TextEditingController();
-TextEditingController classnameController = TextEditingController();
-
-class _EditPageState extends State<EditPage> {
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController(text: widget.name);
-    addressController = TextEditingController(text: widget.address);
-    ageController = TextEditingController(text: widget.age);
-    classnameController = TextEditingController(text: widget.classname);
-  }
+  const EditPage({super.key, required this.index, required this.student});
 
   @override
   Widget build(BuildContext context) {
+    final nameController = TextEditingController(text: student.name);
+    final ageController = TextEditingController(text: student.age.toString());
+    final addressController = TextEditingController(text: student.address);
+    final classController = TextEditingController(text: student.classname);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Students Update',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      appBar: AppBar(title: const Text("Edit Student")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: "Name"),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: ageController,
+              decoration: const InputDecoration(labelText: "Age"),
+              keyboardType: TextInputType.number,
+            ),
+            TextField(
+              controller: addressController,
+              decoration: const InputDecoration(labelText: "Address"),
+            ),
+            TextField(
+              controller: classController,
+              decoration: const InputDecoration(labelText: "Subjet"),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                final updated = StudentModel(
+                  name: nameController.text,
+                  age: int.tryParse(ageController.text) ?? 0, 
+                  address: addressController.text,
+                  classname: classController.text, 
+                  addedOn: DateTime.now(), 
+                );
+                context.read<StudentProvider>().updateStudent(index, updated);
+                Navigator.pop(context);
+              },
+              child: const Text("Update"),
+            ),
+          ],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.teal,
-        automaticallyImplyLeading: false,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 40),
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
-          TextField(
-            controller: addressController,
-            decoration: InputDecoration(
-              labelText: 'Address',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
-          TextField(
-            controller: ageController,
-            decoration: InputDecoration(
-              labelText: 'Age',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
-          TextField(
-            controller: classnameController,
-            decoration: InputDecoration(
-              labelText: 'Class',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-          ),
-          SizedBox(height: 40),
-
-          ElevatedButton(
-            onPressed: () {
-              editBtn(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.teal,
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-
-            child: Text(
-              'Edit',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
       ),
     );
-  }
-
-  void editBtn(BuildContext content) {
-    final name = nameController.text.trim();
-    final address = addressController.text.trim();
-    final age = ageController.text.trim();
-    final classname = classnameController.text.trim();
-
-    if (name.isEmpty || address.isEmpty || age.isEmpty || classname.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Center(
-            child: Text(
-              'Enter Fields',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          backgroundColor: Colors.redAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      );
-    } else {
-      final editData = PersonData(
-        name: name,
-        address: address,
-        age: age,
-        classname: classname,
-        addedOn: DateTime.now(),
-      );
-      updateData(widget.keyId, editData);
-      Navigator.pop(context);
-    }
   }
 }

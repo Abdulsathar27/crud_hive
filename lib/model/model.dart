@@ -2,28 +2,28 @@ import 'package:hive/hive.dart';
 part 'model.g.dart';
 
 @HiveType(typeId: 0)
-class PersonData {
+class StudentModel {
   @HiveField(0)
-  String? name;
+  String name;
 
   @HiveField(1)
-  String? address;
+  String address;
 
   @HiveField(2)
-  String? age;
+  int age;
 
   @HiveField(3)
-  String? classname;
+  String classname;
 
   @HiveField(4)
    final DateTime addedOn;
 
-  PersonData(
+  StudentModel(
     {
-    this.name,
-    this.address,
-    this.age,
-    this.classname,
+    required this.name,
+    required this.address,
+    required this.age,
+    required this.classname,
     required this.addedOn,
     });
 }

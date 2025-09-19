@@ -6,27 +6,27 @@ part of 'model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class PersonDataAdapter extends TypeAdapter<PersonData> {
+class StudentModelAdapter extends TypeAdapter<StudentModel> {
   @override
   final int typeId = 0;
 
   @override
-  PersonData read(BinaryReader reader) {
+  StudentModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return PersonData(
-      name: fields[0] as String?,
-      address: fields[1] as String?,
-      age: fields[2] as String?,
-      classname: fields[3] as String?,
+    return StudentModel(
+      name: fields[0] as String,
+      address: fields[1] as String,
+      age: fields[2] as int,
+      classname: fields[3] as String,
       addedOn: fields[4] as DateTime,
     );
   }
 
   @override
-  void write(BinaryWriter writer, PersonData obj) {
+  void write(BinaryWriter writer, StudentModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
@@ -47,7 +47,7 @@ class PersonDataAdapter extends TypeAdapter<PersonData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PersonDataAdapter &&
+      other is StudentModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
