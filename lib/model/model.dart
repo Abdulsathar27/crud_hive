@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 part 'model.g.dart';
 
 @HiveType(typeId: 0)
-class StudentModel {
+class StudentModel  extends HiveObject{
   @HiveField(0)
   String name;
 
@@ -16,7 +16,7 @@ class StudentModel {
   String classname;
 
   @HiveField(4)
-   final DateTime addedOn;
+  DateTime addedOn;
 
   StudentModel(
     {

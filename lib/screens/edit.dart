@@ -3,7 +3,6 @@ import 'package:crud/providers/student_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class EditPage extends StatelessWidget {
   final int index;
   final StudentModel student;
@@ -18,7 +17,13 @@ class EditPage extends StatelessWidget {
     final classController = TextEditingController(text: student.classname);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Student")),
+      appBar: AppBar(
+        title: const Text(
+          "Edit Student",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.teal,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,28 +38,49 @@ class EditPage extends StatelessWidget {
               decoration: const InputDecoration(labelText: "Age"),
               keyboardType: TextInputType.number,
             ),
+            const SizedBox(height: 12),
             TextField(
               controller: addressController,
               decoration: const InputDecoration(labelText: "Address"),
             ),
+            const SizedBox(height: 12),
             TextField(
               controller: classController,
               decoration: const InputDecoration(labelText: "Subjet"),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             ElevatedButton(
-              onPressed: () {
-                final updated = StudentModel(
-                  name: nameController.text,
-                  age: int.tryParse(ageController.text) ?? 0, 
-                  address: addressController.text,
-                  classname: classController.text, 
-                  addedOn: DateTime.now(), 
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 14,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                elevation: 5,
+              ),
+              onPressed: () async {
+                await context.read<StudentProvider>().updateStudent(
+                  student,
+                  newName: nameController.text,
+                  newAge: int.tryParse(ageController.text) ?? 0,
+                  newAddress: addressController.text,
+                  newClassname: classController.text,
                 );
-                context.read<StudentProvider>().updateStudent(index, updated);
+
                 Navigator.pop(context);
               },
-              child: const Text("Update"),
+              child: const Text(
+                "✏️ Update",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
+              ),
             ),
           ],
         ),

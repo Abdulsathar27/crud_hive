@@ -13,7 +13,13 @@ class AddPage extends StatelessWidget {
     final addressController = TextEditingController();
     final classController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(title: const Text("Add Student")),
+      appBar: AppBar(
+        title: const Text(
+          "Add Student",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.teal,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,12 +39,25 @@ class AddPage extends StatelessWidget {
               controller: addressController,
               decoration: const InputDecoration(labelText: "Address"),
             ),
+            const SizedBox(height: 12,),
             TextField(
               controller: classController,
               decoration: const InputDecoration(labelText: "Subjet"),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 50),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal, 
+                foregroundColor: Colors.white, 
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 14,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30), 
+                ),
+                elevation: 5, 
+              ),
               onPressed: () {
                 final student = StudentModel(
                   name: nameController.text,
@@ -50,7 +69,14 @@ class AddPage extends StatelessWidget {
                 context.read<StudentProvider>().addStudent(student);
                 Navigator.pop(context);
               },
-              child: const Text("Add"),
+              child: const Text(
+                "➕ Add Student",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                ),
+              ),
             ),
           ],
         ),
